@@ -1,5 +1,6 @@
 // src/pages/TurtleConnectMain.jsx
 import { useState } from "react";
+import "../styles/main-and-booking.css";
 import Header from "../components/Header";
 import userImg from "../assets/Ellipse.png";
 

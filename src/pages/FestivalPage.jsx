@@ -1,4 +1,6 @@
 // src/pages/FestivalPage.jsx
+import { useState } from "react";
+import "../styles/festival.css";
 import Header from "../components/Header";
 
 const HERO_PASS_BUTTON_LABEL = "패스 구매하기";
