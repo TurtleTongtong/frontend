@@ -714,12 +714,117 @@ body {
     padding: 32px 16px 0;
   }
 
-  .tc-festival-card {
-    grid-template-columns: 1fr;
-    height: auto;
-  }
-
+.tc-festival-card {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border-radius: 16px;
+  background-color: #ffffff;
+  overflow: hidden;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+    0 4px 6px -4px rgba(0, 0, 0, 0.1);
+}
   .tc-festival-card__image-wrap {
     height: 240px;
   }
+}
+
+/* 축제: 세로 2장 */
+.tc-festival__list--festival {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+/* 관광지: 2×2 그리드 */
+.tc-festival__list--attraction {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 32px;
+}
+
+/* 관광지 카드(2×2)의 세부 요소 */
+/* 이미지 영역 높이 고정 (관광지 카드 위쪽 280px) */
+.tc-attraction-card .tc-festival-card__image-wrap {
+  position: relative;
+  height: 280px;
+}
+
+/* 상단 카테고리/할인 pill */
+.tc-attraction-card__pill {
+  position: absolute;
+  left: 16px;
+  top: 11px;
+  padding: 8px 16px;
+  border-radius: 9999px;
+  font-size: 14px;
+  background-color: rgba(255, 255, 255, 0.9);
+  color: #21272a;
+}
+
+.tc-attraction-card__pill--discount {
+  left: auto;
+  right: 16px;
+  top: 16px;
+  background-color: #fb2c36;
+  color: #ffffff;
+}
+
+/* 하단 평점 영역 */
+.tc-attraction-card__rating {
+  position: absolute;
+  left: 16px;
+  bottom: 16px;
+  padding: 8px 12px;
+  border-radius: 9999px;
+  background-color: rgba(255, 255, 255, 0.9);
+  font-size: 12px;
+  display: inline-flex;
+  gap: 4px;
+  align-items: center;
+}
+
+.tc-attraction-card__rating-score {
+  font-size: 14px;
+  color: #21272a;
+}
+
+.tc-attraction-card__rating-count {
+  font-size: 12px;
+  color: #4a5565;
+}
+
+/* 본문 하이라이트 박스 (파란 박스) */
+.tc-attraction-card__highlight {
+  margin-top: 8px;
+  padding: 12px 13px;
+  border-radius: 10px;
+  border: 1px solid #bedbff;
+  background-color: #ebf3ff;
+  font-size: 13px;
+  color: #193cb8;
+}
+
+/* 후기/상세보기 푸터 */
+.tc-attraction-card__footer {
+  margin-top: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 14px;
+}
+
+.tc-attraction-card__reviews {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #4a5565;
+}
+
+.tc-attraction-card__more {
+  border: none;
+  background: none;
+  padding: 0;
+  font-size: 14px;
+  color: #009ab3;
+  cursor: pointer;
 }
