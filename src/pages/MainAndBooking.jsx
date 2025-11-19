@@ -1,6 +1,7 @@
 // src/pages/TurtleConnectMain.jsx
 import { useState } from "react";
 import logoTurtle from "../assets/logo-turtle.png";
+import userImg from "../assets/Ellipse.png";
 
 const HERO_BG =
   "https://www.figma.com/api/mcp/asset/b0c80aad-ab8b-4602-a194-819251968bfe"; // 메인 상단 배경 이미지
@@ -96,7 +97,8 @@ function BookingSection() {
 
           <div className="tc-booking__participants">
             <div className="tc-booking__participants-name">
-              박대시, 김니키 외 16명
+              <img src={userImg} />
+              <p>박대시, 김니키 외 16명</p>
             </div>
           </div>
 
