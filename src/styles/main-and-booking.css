@@ -1,121 +1,4 @@
-/* src/index.css */
-:root {
-  font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR",
-    system-ui, sans-serif;
-  color: #212121;
-  background-color: #f6f7f8;
-}
-
-* {
-  box-sizing: border-box;
-}
-
-body {
-  margin: 0;
-  background-color: #f6f7f8;
-}
-
-.tc-root {
-  min-height: 100vh;
-  background-color: #f6f7f8;
-}
-
-/* 헤더 */
-.tc-header {
-  position: sticky;
-  top: 0;
-  z-index: 10;
-  height: 72px;
-  display: flex;
-  align-items: center;
-  padding: 0 80px;
-  border-bottom: 1px solid #dde1e6;
-  background-color: #ffffff;
-}
-
-.tc-header__left {
-  display: flex;
-  align-items: center;
-  flex: 1;
-  gap: 8px;
-}
-
-.tc-header__logo-icon {
-  width: 40px;
-  height: 40px;
-}
-
-.tc-header__logo-text {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-
-.tc-header__logo-title {
-  font-size: 24px;
-  font-weight: 700;
-  color: #697077;
-}
-
-.tc-header__logo-sub {
-  font-size: 12px;
-  color: #697077;
-}
-
-.tc-header__nav {
-  display: flex;
-  gap: 16px;
-}
-
-.tc-header__nav-item {
-  border: none;
-  background: none;
-  padding: 12px 8px;
-  font-size: 16px;
-  cursor: pointer;
-  color: #21272a;
-}
-
-.tc-header__nav-item--active {
-  color: #009ab3;
-}
-
-.tc-header__right {
-  flex: 1;
-  display: flex;
-  justify-content: flex-end;
-  gap: 16px;
-}
-
-/* 버튼 기본 */
-.tc-btn {
-  height: 48px;
-  padding: 0 16px;
-  border-radius: 8px;
-  font-size: 16px;
-  cursor: pointer;
-  border-width: 2px;
-  border-style: solid;
-}
-
-.tc-btn--outline {
-  background-color: #ffffff;
-  color: #0f62fe;
-  border-color: #0f62fe;
-}
-
-.tc-btn--primary {
-  background-color: #009ab3;
-  border-color: #0f62fe;
-  color: #ffffff;
-}
-
-/* 메인 레이아웃 */
-.tc-main {
-  max-width: 1440px;
-  margin: 0 auto;
-  padding: 24px 80px 80px;
-}
+/* src/styles/main-and-booking.css */
 
 /* 히어로 섹션 */
 .tc-hero {
@@ -196,17 +79,6 @@ body {
   gap: 16px;
 }
 
-.tc-section-title {
-  font-size: 20px;
-  margin: 0 0 4px;
-}
-
-.tc-section-caption {
-  font-size: 12px;
-  color: #555;
-  margin: 0 0 12px;
-}
-
 .tc-booking__participants-name {
   font-size: 12px;
   color: #212121;
@@ -226,7 +98,7 @@ body {
   margin-top: 8px;
 }
 
-/* 달력 placeholder */
+/* 달력 placeholder (지금은 안 쓰더라도 남겨둬도 무방) */
 .tc-calendar-placeholder {
   margin-top: 8px;
   border-radius: 16px;
@@ -270,18 +142,17 @@ body {
 }
 
 .tc-select__dropdown {
-  position: absolute;      /* 추가 */
-  top: calc(100% + 4px);   /* 셀렉트 박스 바로 아래에 붙도록 */
+  position: absolute;
+  top: calc(100% + 4px);
   left: 0;
   width: 100%;
-
-  margin-top: 0;           /* 기존 margin-top이 있다면 0으로 */
+  margin-top: 0;
   border-radius: 10px;
   border: 1px solid #e7e7e7;
   overflow: hidden;
   background-color: #ffffff;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.06);
-  z-index: 10;             /* 겹쳤을 때 위에 보이도록 */
+  z-index: 10;
 }
 
 .tc-select__option {
@@ -345,21 +216,6 @@ body {
   font-size: 12px;
   text-decoration: underline;
   cursor: pointer;
-}
-
-/* 간단 반응형 */
-@media (max-width: 1024px) {
-  .tc-main {
-    padding: 24px 16px 40px;
-  }
-
-  .tc-header {
-    padding: 0 16px;
-  }
-
-  .tc-booking__card {
-    grid-template-columns: 1fr;
-  }
 }
 
 /* 달력 전체 */
@@ -436,4 +292,11 @@ body {
   margin-top: 8px;
   font-size: 12px;
   color: #3f6262;
+}
+
+/* 메인/예약 반응형 */
+@media (max-width: 1024px) {
+  .tc-booking__card {
+    grid-template-columns: 1fr;
+  }
 }
