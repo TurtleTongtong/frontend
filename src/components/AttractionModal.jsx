@@ -10,9 +10,9 @@ const AttractionModal = ({ isOpen, onClose, place }) => {
   const features = place?.features || ['포토 뷰', '일몰 뷰', '해변 카페'];
 
   return (
-    <div className="modal-overlay" onClick={onClose}>
-      <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-        <button className="modal-close-button" onClick={onClose}>
+    <div className="attraction-modal-overlay" onClick={onClose}>
+      <div className="attraction-modal-content" onClick={(e) => e.stopPropagation()}>
+        <button className="attraction-modal-close-button" onClick={onClose}>
           &times;
         </button>
 
@@ -42,14 +42,14 @@ const AttractionModal = ({ isOpen, onClose, place }) => {
             <p className="attraction-description">{place.description}</p>
 
             <div className="attraction-info-grid">
-              <div className="info-card">
-                <div className="info-card-title">위치</div>
-                <div className="info-card-body">{locationText}</div>
+              <div className="attraction-info-card">
+                <div className="attraction-info-card-title">위치</div>
+                <div className="attraction-info-card-body">{locationText}</div>
               </div>
 
-              <div className="info-card">
-                <div className="info-card-title">운영 시간</div>
-                <div className="info-card-body">{hoursText}</div>
+              <div className="attraction-info-card">
+                <div className="attraction-info-card-title">운영 시간</div>
+                <div className="attraction-info-card-body">{hoursText}</div>
               </div>
             </div>
 
@@ -71,7 +71,7 @@ const AttractionModal = ({ isOpen, onClose, place }) => {
               </div>
             </div>
 
-            <hr className="divider" />
+            <hr className="attraction-divider" />
 
             <div className="review-form">
               <h4 className="section-title">후기 작성하기</h4>

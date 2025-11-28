@@ -1,4 +1,4 @@
-.modal-overlay {
+.attraction-modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
@@ -11,7 +11,7 @@
   z-index: 1000;
 }
 
-.modal-content {
+.attraction-modal-content {
   background: #fff;
   border-radius: 16px;
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
@@ -26,7 +26,7 @@
   padding: 22px 26px;
 }
 
-.modal-close-button {
+.attraction-modal-close-button {
   position: fixed;
   top: 20px;
   right: 24px;
@@ -116,21 +116,21 @@
   margin-top: 18px;
 }
 
-.info-card {
+.attraction-info-card {
   background: #f7fbfb;
   border: 1px solid #e6f0ef;
   padding: 14px;
   border-radius: 12px;
 }
 
-.info-card-title {
+.attraction-info-card-title {
   font-size: 12px;
   color: #6c757d;
   font-weight: 700;
   margin-bottom: 8px;
 }
 
-.info-card-body {
+.attraction-info-card-body {
   font-size: 14px;
   color: #2b3a3a;
 }
@@ -176,7 +176,7 @@
   font-weight: 600;
 }
 
-.divider {
+.attraction-divider {
   border: none;
   border-top: 1px solid #eef3f5;
   margin: 18px 0;
@@ -228,7 +228,7 @@
 }
 
 @media (max-width: 768px) {
-  .modal-content {
+  .attraction-modal-content {
     width: 94%;
     max-width: 640px;
   }

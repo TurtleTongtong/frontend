@@ -2,7 +2,7 @@
 import { useState } from "react";
 import "../styles/festival.css";
 import Header from "../components/Header";
-import Modal from "../components/FestivalModal";
+import FestivalModal from "../components/FestivalModal";
 import AttractionModal from "../components/AttractionModal";
 
 const HERO_PASS_BUTTON_LABEL = "패스 구매하기";
@@ -138,7 +138,7 @@ export default function FestivalPage() {
           }}
         />
 
-        <Modal
+        <FestivalModal
           isOpen={isModalOpen}
           onClose={closeModal}
           festival={selectedFestival}
