@@ -3,6 +3,7 @@ import { useState } from "react";
 import "../styles/festival.css";
 import Header from "../components/Header";
 import Modal from "../components/FestivalModal";
+import AttractionModal from "../components/AttractionModal";
 
 const HERO_PASS_BUTTON_LABEL = "패스 구매하기";
 
@@ -111,6 +112,8 @@ const ATTRACTIONS = [
 export default function FestivalPage() {
   const [selectedFestival, setSelectedFestival] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedPlace, setSelectedPlace] = useState(null);
+  const [isAttractionOpen, setIsAttractionOpen] = useState(false);
 
   const openFestivalModal = (festival) => {
     setSelectedFestival(festival);
@@ -127,12 +130,27 @@ export default function FestivalPage() {
       <Header />
       <main className="tc-main tc-main--fullwidth">
         <FestivalHero />
-        <FestivalContent onOpenFestival={openFestivalModal} />
+        <FestivalContent
+          onOpenFestival={openFestivalModal}
+          onOpenAttraction={(place) => {
+            setSelectedPlace(place);
+            setIsAttractionOpen(true);
+          }}
+        />
 
         <Modal
           isOpen={isModalOpen}
           onClose={closeModal}
           festival={selectedFestival}
+        />
+
+        <AttractionModal
+          isOpen={isAttractionOpen}
+          onClose={() => {
+            setIsAttractionOpen(false);
+            setSelectedPlace(null);
+          }}
+          place={selectedPlace}
         />
       </main>
     </div>
@@ -160,7 +178,7 @@ function FestivalHero() {
   );
 }
 
-function FestivalContent({ onOpenFestival }) {
+function FestivalContent({ onOpenFestival, onOpenAttraction }) {
   const [activeTab, setActiveTab] = useState("festival"); // "festival" | "attraction"
 
   const isFestival = activeTab === "festival";
@@ -212,7 +230,7 @@ function FestivalContent({ onOpenFestival }) {
       ) : (
         <div className="tc-festival__list tc-festival__list--attraction">
           {ATTRACTIONS.map((a) => (
-            <AttractionCard key={a.id} place={a} />
+            <AttractionCard key={a.id} place={a} onOpen={onOpenAttraction} />
           ))}
         </div>
       )}
@@ -290,7 +308,7 @@ function FestivalCard({ festival, onOpen }) {
 }
 
 /** 관광지 카드 (2×2 그리드, Figma 관광지 페이지 레이아웃) */
-function AttractionCard({ place }) {
+function AttractionCard({ place, onOpen }) {
   return (
     <article className="tc-festival-card tc-attraction-card">
       <div className="tc-festival-card__image-wrap">
@@ -345,7 +363,12 @@ function AttractionCard({ place }) {
           <span className="tc-attraction-card__reviews">
             후기 {place.reviewCount}개
           </span>
-          <button className="tc-attraction-card__more">상세보기 →</button>
+          <button
+            className="tc-attraction-card__more"
+            onClick={() => onOpen && onOpen(place)}
+          >
+            상세보기 →
+          </button>
         </div>
       </div>
     </article>
