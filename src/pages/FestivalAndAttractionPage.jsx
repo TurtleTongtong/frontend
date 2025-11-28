@@ -51,7 +51,7 @@ const FESTIVALS = [
 const ATTRACTIONS = [
   {
     id: 1,
-    title: "거북섬 전통 사찰",
+    title: "웨이브파크",
     category: "체험",
     discountBadge: "패스권 소지자 입장료 무료",
     rating: "4.8",
@@ -60,7 +60,7 @@ const ATTRACTIONS = [
       "세계 최대 규모의 인공 파도 시설을 갖춘 거북섬의 대표 액티비티 명소입니다. 초보부터 숙련자까지 레벨별 파도존과 전문 강습 프로그램도 마련되어 있습니다.",
     highlight: "여름 기간 서핑 강습 50% 할인",
     imageMain:
-      "https://www.figma.com/api/mcp/asset/e9f83f5f-45b3-4624-a6f2-406fa561b1ee",
+      "https://www.figma.com/api/mcp/asset/417881fe-854c-47fe-848b-c7e3223543f3",
     imageOverlay:
       "https://www.figma.com/api/mcp/asset/417881fe-854c-47fe-848b-c7e3223543f3",
   },
@@ -120,9 +120,14 @@ export default function FestivalPage() {
     setIsModalOpen(true);
   };
 
-  const closeModal = () => {
+  const closeFestivalModal = () => {
     setIsModalOpen(false);
     setSelectedFestival(null);
+  };
+
+  const closeAttractionModal = () => {
+    setIsAttractionOpen(false);
+    setSelectedPlace(null);
   };
 
   return (
@@ -140,16 +145,13 @@ export default function FestivalPage() {
 
         <FestivalModal
           isOpen={isModalOpen}
-          onClose={closeModal}
+          onClose={closeFestivalModal}
           festival={selectedFestival}
         />
 
         <AttractionModal
           isOpen={isAttractionOpen}
-          onClose={() => {
-            setIsAttractionOpen(false);
-            setSelectedPlace(null);
-          }}
+          onClose={closeAttractionModal}
           place={selectedPlace}
         />
       </main>

@@ -1,11 +1,25 @@
-// src/components/Modal.jsx
-import React from 'react';
+// src/components/FestivalModal.jsx
+import React, { useEffect } from 'react';
 import '../styles/festival-modal.css';
+import period from '../assets/icons/period.png'
+import location from '../assets/icons/location.png'
+import participants from '../assets/icons/participants.png'
 
-const Modal = ({ isOpen, onClose, festival }) => {
-  if (!isOpen) {
-    return null;
-  }
+const FestivalModal = ({ isOpen, onClose, festival }) => {
+  if (!isOpen) return null;
+
+  // close on Escape key
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape' || e.key === 'Esc') {
+        onClose && onClose();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, onClose]);
 
   return (
     <div className="festival-modal-overlay" onClick={onClose}>
@@ -33,22 +47,22 @@ const Modal = ({ isOpen, onClose, festival }) => {
             {/* 2x2 정보 카드 그리드 */}
             <div className="festival-modal-info-grid">
               <div className="festival-info-card">
-                <div className="festival-info-card-title">축제 기간</div>
+                <div className="festival-info-card-title"><img src={period}/>축제 기간</div>
                 <div className="festival-info-card-body">{festival.date}</div>
               </div>
 
               <div className="festival-info-card">
-                <div className="festival-info-card-title">위치</div>
+                <div className="festival-info-card-title"><img src={location}/>위치</div>
                 <div className="festival-info-card-body">{festival.place}</div>
               </div>
 
               <div className="festival-info-card">
-                <div className="festival-info-card-title">예상 참여 인원</div>
+                <div className="festival-info-card-title"><img src={participants}/>예상 참여 인원</div>
                 <div className="festival-info-card-body">약 50,000명</div>
               </div>
 
               <div className="festival-info-card festival-info-card--discount">
-                <div className="festival-info-card-title">할인 정보</div>
+                <div className="festival-info-card-title">💰 할인 정보</div>
                 <div className="festival-info-card-body">
                   {festival.discountBadge || '없음'}
                 </div>
@@ -84,4 +98,4 @@ const Modal = ({ isOpen, onClose, festival }) => {
   );
 };
 
-export default Modal;
+export default FestivalModal;

@@ -125,10 +125,19 @@
 }
 
 .festival-info-card-title {
-  font-size: 12px;
   color: #6c757d;
   font-weight: 700;
   margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.festival-info-card-title img {
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
+  display: inline-block;
 }
 
 .festival-info-card-body {

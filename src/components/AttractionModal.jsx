@@ -1,8 +1,23 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import '../styles/attraction-modal.css';
+import location from '../assets/icons/location.png'
+import time from '../assets/icons/time.png'
 
 const AttractionModal = ({ isOpen, onClose, place }) => {
   if (!isOpen) return null;
+
+  // close on Escape key
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape' || e.key === 'Esc') {
+        onClose && onClose();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, onClose]);
 
   const locationText = place?.place || '거북섬 동부 해안';
   const hoursText = place?.hours || '연중무휴 24시간';
@@ -43,12 +58,12 @@ const AttractionModal = ({ isOpen, onClose, place }) => {
 
             <div className="attraction-info-grid">
               <div className="attraction-info-card">
-                <div className="attraction-info-card-title">위치</div>
+                <div className="attraction-info-card-title"><img src={location}/>위치</div>
                 <div className="attraction-info-card-body">{locationText}</div>
               </div>
 
               <div className="attraction-info-card">
-                <div className="attraction-info-card-title">운영 시간</div>
+                <div className="attraction-info-card-title"><img src={time}/>운영 시간</div>
                 <div className="attraction-info-card-body">{hoursText}</div>
               </div>
             </div>
