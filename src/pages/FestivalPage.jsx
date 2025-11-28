@@ -2,6 +2,7 @@
 import { useState } from "react";
 import "../styles/festival.css";
 import Header from "../components/Header";
+import Modal from "../components/FestivalModal";
 
 const HERO_PASS_BUTTON_LABEL = "패스 구매하기";
 
@@ -21,7 +22,7 @@ const FESTIVALS = [
     benefits: ["라이브 버스킹", "물빛 라이트쇼", "푸드트럭 페어"],
     discountBadge: "패스권 소지자 20% 할인",
     imageMain:
-      "https://www.figma.com/api/mcp/asset/e61dd276-68bf-4938-9415-cedcfb41db76",
+      "https://www.figma.com/api/mcp/asset/6573653e-73e7-49db-9e9e-f0140404caf6",
     imageOverlay:
       "https://www.figma.com/api/mcp/asset/6573653e-73e7-49db-9e9e-f0140404caf6",
   },
@@ -37,7 +38,7 @@ const FESTIVALS = [
     benefits: ["라이브 버스킹", "물빛 라이트쇼", "푸드트럭 페어"],
     discountBadge: null,
     imageMain:
-      "https://www.figma.com/api/mcp/asset/e61dd276-68bf-4938-9415-cedcfb41db76",
+      "https://www.figma.com/api/mcp/asset/6573653e-73e7-49db-9e9e-f0140404caf6",
     imageOverlay:
       "https://www.figma.com/api/mcp/asset/6573653e-73e7-49db-9e9e-f0140404caf6",
   },
@@ -108,12 +109,31 @@ const ATTRACTIONS = [
 ];
 
 export default function FestivalPage() {
+  const [selectedFestival, setSelectedFestival] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const openFestivalModal = (festival) => {
+    setSelectedFestival(festival);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setSelectedFestival(null);
+  };
+
   return (
     <div className="tc-root">
       <Header />
       <main className="tc-main tc-main--fullwidth">
         <FestivalHero />
-        <FestivalContent />
+        <FestivalContent onOpenFestival={openFestivalModal} />
+
+        <Modal
+          isOpen={isModalOpen}
+          onClose={closeModal}
+          festival={selectedFestival}
+        />
       </main>
     </div>
   );
@@ -140,7 +160,7 @@ function FestivalHero() {
   );
 }
 
-function FestivalContent() {
+function FestivalContent({ onOpenFestival }) {
   const [activeTab, setActiveTab] = useState("festival"); // "festival" | "attraction"
 
   const isFestival = activeTab === "festival";
@@ -186,7 +206,7 @@ function FestivalContent() {
       {isFestival ? (
         <div className="tc-festival__list tc-festival__list--festival">
           {FESTIVALS.map((f) => (
-            <FestivalCard key={f.id} festival={f} />
+            <FestivalCard key={f.id} festival={f} onOpen={onOpenFestival} />
           ))}
         </div>
       ) : (
@@ -201,7 +221,7 @@ function FestivalContent() {
 }
 
 /** 축제 카드 (가로 2단, 기존 디자인) */
-function FestivalCard({ festival }) {
+function FestivalCard({ festival, onOpen }) {
   return (
     <article className="tc-festival-card">
       <div className="tc-festival-card__image-wrap">
@@ -258,7 +278,10 @@ function FestivalCard({ festival }) {
           </div>
         </div>
 
-        <button className="tc-festival-card__button">
+        <button
+          className="tc-festival-card__button"
+          onClick={() => onOpen && onOpen(festival)}
+        >
           이 축제 정보 보러가기
         </button>
       </div>
