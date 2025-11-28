@@ -2,6 +2,8 @@
 import { useState } from "react";
 import "../styles/festival.css";
 import Header from "../components/Header";
+import FestivalModal from "../components/FestivalModal";
+import AttractionModal from "../components/AttractionModal";
 
 const HERO_PASS_BUTTON_LABEL = "패스 구매하기";
 
@@ -21,7 +23,7 @@ const FESTIVALS = [
     benefits: ["라이브 버스킹", "물빛 라이트쇼", "푸드트럭 페어"],
     discountBadge: "패스권 소지자 20% 할인",
     imageMain:
-      "https://www.figma.com/api/mcp/asset/e61dd276-68bf-4938-9415-cedcfb41db76",
+      "https://www.figma.com/api/mcp/asset/6573653e-73e7-49db-9e9e-f0140404caf6",
     imageOverlay:
       "https://www.figma.com/api/mcp/asset/6573653e-73e7-49db-9e9e-f0140404caf6",
   },
@@ -37,7 +39,7 @@ const FESTIVALS = [
     benefits: ["라이브 버스킹", "물빛 라이트쇼", "푸드트럭 페어"],
     discountBadge: null,
     imageMain:
-      "https://www.figma.com/api/mcp/asset/e61dd276-68bf-4938-9415-cedcfb41db76",
+      "https://www.figma.com/api/mcp/asset/6573653e-73e7-49db-9e9e-f0140404caf6",
     imageOverlay:
       "https://www.figma.com/api/mcp/asset/6573653e-73e7-49db-9e9e-f0140404caf6",
   },
@@ -49,7 +51,7 @@ const FESTIVALS = [
 const ATTRACTIONS = [
   {
     id: 1,
-    title: "거북섬 전통 사찰",
+    title: "웨이브파크",
     category: "체험",
     discountBadge: "패스권 소지자 입장료 무료",
     rating: "4.8",
@@ -58,7 +60,7 @@ const ATTRACTIONS = [
       "세계 최대 규모의 인공 파도 시설을 갖춘 거북섬의 대표 액티비티 명소입니다. 초보부터 숙련자까지 레벨별 파도존과 전문 강습 프로그램도 마련되어 있습니다.",
     highlight: "여름 기간 서핑 강습 50% 할인",
     imageMain:
-      "https://www.figma.com/api/mcp/asset/e9f83f5f-45b3-4624-a6f2-406fa561b1ee",
+      "https://www.figma.com/api/mcp/asset/417881fe-854c-47fe-848b-c7e3223543f3",
     imageOverlay:
       "https://www.figma.com/api/mcp/asset/417881fe-854c-47fe-848b-c7e3223543f3",
   },
@@ -108,12 +110,50 @@ const ATTRACTIONS = [
 ];
 
 export default function FestivalPage() {
+  const [selectedFestival, setSelectedFestival] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedPlace, setSelectedPlace] = useState(null);
+  const [isAttractionOpen, setIsAttractionOpen] = useState(false);
+
+  const openFestivalModal = (festival) => {
+    setSelectedFestival(festival);
+    setIsModalOpen(true);
+  };
+
+  const closeFestivalModal = () => {
+    setIsModalOpen(false);
+    setSelectedFestival(null);
+  };
+
+  const closeAttractionModal = () => {
+    setIsAttractionOpen(false);
+    setSelectedPlace(null);
+  };
+
   return (
     <div className="tc-root">
       <Header />
       <main className="tc-main tc-main--fullwidth">
         <FestivalHero />
-        <FestivalContent />
+        <FestivalContent
+          onOpenFestival={openFestivalModal}
+          onOpenAttraction={(place) => {
+            setSelectedPlace(place);
+            setIsAttractionOpen(true);
+          }}
+        />
+
+        <FestivalModal
+          isOpen={isModalOpen}
+          onClose={closeFestivalModal}
+          festival={selectedFestival}
+        />
+
+        <AttractionModal
+          isOpen={isAttractionOpen}
+          onClose={closeAttractionModal}
+          place={selectedPlace}
+        />
       </main>
     </div>
   );
@@ -140,7 +180,7 @@ function FestivalHero() {
   );
 }
 
-function FestivalContent() {
+function FestivalContent({ onOpenFestival, onOpenAttraction }) {
   const [activeTab, setActiveTab] = useState("festival"); // "festival" | "attraction"
 
   const isFestival = activeTab === "festival";
@@ -186,13 +226,13 @@ function FestivalContent() {
       {isFestival ? (
         <div className="tc-festival__list tc-festival__list--festival">
           {FESTIVALS.map((f) => (
-            <FestivalCard key={f.id} festival={f} />
+            <FestivalCard key={f.id} festival={f} onOpen={onOpenFestival} />
           ))}
         </div>
       ) : (
         <div className="tc-festival__list tc-festival__list--attraction">
           {ATTRACTIONS.map((a) => (
-            <AttractionCard key={a.id} place={a} />
+            <AttractionCard key={a.id} place={a} onOpen={onOpenAttraction} />
           ))}
         </div>
       )}
@@ -201,7 +241,7 @@ function FestivalContent() {
 }
 
 /** 축제 카드 (가로 2단, 기존 디자인) */
-function FestivalCard({ festival }) {
+function FestivalCard({ festival, onOpen }) {
   return (
     <article className="tc-festival-card">
       <div className="tc-festival-card__image-wrap">
@@ -258,7 +298,10 @@ function FestivalCard({ festival }) {
           </div>
         </div>
 
-        <button className="tc-festival-card__button">
+        <button
+          className="tc-festival-card__button"
+          onClick={() => onOpen && onOpen(festival)}
+        >
           이 축제 정보 보러가기
         </button>
       </div>
@@ -267,9 +310,13 @@ function FestivalCard({ festival }) {
 }
 
 /** 관광지 카드 (2×2 그리드, Figma 관광지 페이지 레이아웃) */
-function AttractionCard({ place }) {
+function AttractionCard({ place, onOpen }) {
   return (
-    <article className="tc-festival-card tc-attraction-card">
+    <article
+      className="tc-festival-card tc-attraction-card"
+      // force single-column layout for attraction cards so image sits above text
+      style={{ gridTemplateColumns: "1fr" }}
+    >
       <div className="tc-festival-card__image-wrap">
         <img
           src={place.imageMain}
@@ -322,7 +369,12 @@ function AttractionCard({ place }) {
           <span className="tc-attraction-card__reviews">
             후기 {place.reviewCount}개
           </span>
-          <button className="tc-attraction-card__more">상세보기 →</button>
+          <button
+            className="tc-attraction-card__more"
+            onClick={() => onOpen && onOpen(place)}
+          >
+            상세보기 →
+          </button>
         </div>
       </div>
     </article>
