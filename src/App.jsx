@@ -2,6 +2,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import TurtleConnectMain from "./pages/MainAndBooking";
 import FestivalPage from "./pages/FestivalAndAttractionPage";
+import LoginPage from "./pages/Login"
 
 export default function App() {
   return (
@@ -9,6 +10,7 @@ export default function App() {
       <Routes>
         <Route path="/" element={<TurtleConnectMain />} />
         <Route path="/festivals" element={<FestivalPage />} />
+        <Route path="/login" element={<LoginPage />} />
       </Routes>
     </BrowserRouter>
   );

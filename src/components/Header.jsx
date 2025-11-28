@@ -1,6 +1,5 @@
 // src/components/Header.jsx
 import { useLocation, useNavigate } from "react-router-dom";
-// logoTurtle import 경로는 현재 구조에 맞게 그대로 사용하세요.
 import logoTurtle from "../assets/logo-turtle.png";
 
 export default function Header() {
@@ -46,7 +45,7 @@ export default function Header() {
       </nav>
 
       <div className="tc-header__right">
-        <button className="tc-btn tc-btn--outline">로그인</button>
+        <button className="tc-btn tc-btn--outline" onClick={() => navigate("/login")}>로그인</button>
         <button className="tc-btn tc-btn--primary">회원가입</button>
       </div>
     </header>
