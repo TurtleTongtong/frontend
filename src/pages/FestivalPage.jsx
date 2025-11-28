@@ -310,7 +310,11 @@ function FestivalCard({ festival, onOpen }) {
 /** 관광지 카드 (2×2 그리드, Figma 관광지 페이지 레이아웃) */
 function AttractionCard({ place, onOpen }) {
   return (
-    <article className="tc-festival-card tc-attraction-card">
+    <article
+      className="tc-festival-card tc-attraction-card"
+      // force single-column layout for attraction cards so image sits above text
+      style={{ gridTemplateColumns: "1fr" }}
+    >
       <div className="tc-festival-card__image-wrap">
         <img
           src={place.imageMain}
