@@ -36,3 +36,16 @@ export const cancelTourRequest = async (id) => {
     throw error;
   }
 };
+
+// 4. 내 프로필 정보 가져오기
+export const getMyProfile = async () => {
+  try {
+    // 백엔드 스웨거에서 "내 정보 조회" API 주소를 확인해서 맞춰야 함
+    // (예시: /api/members/me 또는 /api/users/me 등)
+    const response = await api.get("/api/members/me"); 
+    return response.data;
+  } catch (error) {
+    console.error("내 정보 조회 실패:", error);
+    throw error;
+  }
+};

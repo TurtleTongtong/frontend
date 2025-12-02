@@ -1,17 +1,33 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { getMyRequests } from "../../api/tourApi";
+import { getMyRequests, getMyProfile } from "../../api/tourApi";
 import Header from "../../components/Header";
 import "../../styles/UserMyPage.css";
 
 export default function UserMyPage() {
+  const [userInfo, setUserInfo] = useState(null); // 내 정보 상태
+
+  useEffect(() => {
+    // 페이지 들어오면 내 정보 가져오기
+    const fetchProfile = async () => {
+      try {
+        const data = await getMyProfile();
+        setUserInfo(data); // 가져온 정보 저장
+      } catch (error) {
+        console.log("프로필 정보를 못 가져왔어요 (API 주소 확인 필요)");
+      }
+    };
+    fetchProfile();
+  }, []);
+
   return (
     <div className="mypage-wrapper">
       <Header />
       
       <main className="mypage-container">
-        {/* 1. 프로필 관리 */}
-        <ProfileSection />
+
+        {/* 가져온 userinfo를 프로필 섹션에 전달 */}
+        <ProfileSection user={userInfo} />
 
         {/* 2. 관심사 */}
         <InterestSection />
@@ -160,7 +176,14 @@ function EstimateListSection() {
 
 
 
-function ProfileSection() {
+function ProfileSection({ user }) {
+  
+  // 데이터가 아직 안 왔으면 로딩 중 표시 or 기본값
+  const name = user?.name || "로딩 중...";
+  const email = user?.email || "-";
+  // 프로필 이미지 (없으면 기본 이미지)
+  const profileImg = user?.profileImage || "https://placehold.co/84x84";
+
   return (
     <section className="mp-card">
       <div className="mp-header">
@@ -170,15 +193,15 @@ function ProfileSection() {
         <img src="https://placehold.co/84x84" alt="유저" className="profile-img" />
         <div className="profile-info">
           <div className="info-group">
-            <span className="label">닉네임</span>
+            <span className="label">이름</span>
             <div className="value-row">
-              <span className="value">최성현</span>
+              <span className="value">{name}</span>
               <button className="btn-outline-xs">수정</button>
             </div>
           </div>
           <div className="info-group">
             <span className="label">이메일</span>
-            <span className="value">1233day@naver.com</span>
+            <span className="value">{email}</span>
           </div>
         </div>
         <div className="profile-actions">
