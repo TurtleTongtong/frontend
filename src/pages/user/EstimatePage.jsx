@@ -1,7 +1,16 @@
-// src/pages/user/EstimatePage.jsx
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import "../../styles/EstimatePage.css"; // CSS 파일 분리
-import logoTurtle from "../../assets/logo-turtle.png"; // 로고 경로 확인
+import { getMyRequests, cancelTourRequest } from "../../api/tourApi"; // API 가져오기
+import "../../styles/EstimatePage.css";
+import logoTurtle from "../../assets/logo-turtle.png";
+
+// 역 이름 매핑 (UserMyPage와 동일하게)
+const LOCATION_ID_MAP = {
+  1: "강남역",
+  2: "서울역",
+  3: "정왕역",
+  4: "시흥시청"
+};
 
 export default function EstimatePage() {
   return (
@@ -10,6 +19,7 @@ export default function EstimatePage() {
       <main className="est-content-container">
         <BackLink />
         <PageTitle />
+        {/* 그리드 컴포넌트에 로직 포함 */}
         <EstimateGrid />
       </main>
     </div>
@@ -48,7 +58,7 @@ function BackLink() {
   const navigate = useNavigate();
   return (
     <div className="back-link" onClick={() => navigate("/usermypage")}>
-      <span className="arrow-icon">‹</span> 목록으로 돌아가기
+      <span className="arrow-icon">‹</span> 마이페이지로 돌아가기
     </div>
   );
 }
@@ -56,98 +66,163 @@ function BackLink() {
 function PageTitle() {
   return (
     <div className="page-title-section">
-      <h1>내 견적 확인</h1>
-      <p>신청하신 여행의 견적서를 확인하고 선택하세요</p>
+      <h1>내 견적 전체보기</h1>
+      <p>신청하신 모든 여행 견적 내역입니다.</p>
     </div>
   );
 }
 
 function EstimateGrid() {
-    const navigate = useNavigate();
-  // 목업 데이터 (화면에 보이는 내용 그대로)
-  const estimates = [
-    {
-      id: 1,
-      title: "서울역",
-      date: "12월 1일 - 12월 5일",
-      people: 2,
-      pickup: "서울역",
-      status: "arrived", // 도착함
-      badgeText: "견적 2개 도착",
-      btnText: "견적 보러가기",
-      img: "https://placehold.co/389x200"
-    },
-    {
-      id: 2,
-      title: "서울역",
-      date: "11월 20일 - 11월 22일",
-      people: 3,
-      pickup: "강남역",
-      status: "waiting", // 대기중
-      badgeText: "매칭 대기중",
-      btnText: "견적 대기중",
-      img: "https://placehold.co/389x200"
-    },
-    {
-      id: 3,
-      title: "서울역",
-      date: "11월 20일 - 11월 22일",
-      people: 2,
-      pickup: "신도림역",
-      status: "waiting",
-      badgeText: "매칭 대기중",
-      btnText: "견적 대기중",
-      img: "https://placehold.co/389x200"
-    },
-    {
-      id: 4,
-      title: "서울역",
-      date: "11월 21일 - 11월 23일",
-      people: 2,
-      pickup: "강남역",
-      status: "waiting",
-      badgeText: "매칭 대기중",
-      btnText: "견적 대기중",
-      img: "https://placehold.co/389x200"
+  const navigate = useNavigate();
+  const [cards, setCards] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  // 1. 데이터 불러오기 (UserMyPage와 로직 동일)
+  useEffect(() => {
+    const fetchMyData = async () => {
+      try {
+        const response = await getMyRequests();
+        
+        let listData = [];
+        if (Array.isArray(response)) listData = response;
+        else if (response?.data && Array.isArray(response.data)) listData = response.data;
+        else if (response?.result && Array.isArray(response.result)) listData = response.result;
+
+        const formattedData = listData
+          .filter((item) => item.status !== "CANCELED") // 취소된 건 제외
+          .map((item) => {
+            let dateDisplay = item.startDate;
+            if (item.startDate && item.endDate && item.startDate !== item.endDate) {
+              dateDisplay = `${item.startDate} ~ ${item.endDate}`;
+            }
+
+            const locId = item.locationId || item.location_id; 
+            const locName = item.locationName || LOCATION_ID_MAP[locId] || "(탑승지)";
+            const timeStr = item.pickupTime ? item.pickupTime.substring(11, 16) : "00:00 (미정)";
+            const isWaiting = item.status === "WAITING";
+
+            return {
+              id: item.id,
+              title: locName,
+              date: dateDisplay || "날짜 미정",
+              people: item.participantCount || 0,
+              pickup: `${locName} ${timeStr}`,
+              statusBadge: isWaiting ? "매칭 대기중" : "견적 도착",
+              status: isWaiting ? "waiting" : "arrived", // CSS 클래스용
+              btnText: isWaiting ? "견적 대기중" : "견적 보러가기",
+              btnActive: !isWaiting,
+              img: "https://placehold.co/389x200?text=Turtle+Connect"
+            };
+          })
+          .sort((a, b) => b.id - a.id); // 최신순 정렬
+
+        // 여행사 견적 보여줄 더미 카드 (예시 데이터)
+        const dummyCard = {
+          id: "dummy-1", // 실제 ID와 겹치지 않게 문자열 사용
+          title: "김포공항 (예시)",
+          date: "2025-12-25 (크리스마스)",
+          people: 4,
+          pickup: "김포공항 00:00 (미정)",
+          statusBadge: "견적 도착", // 파란색 뱃지 테스트용
+          status: "arrived",       // CSS 클래스 (파란색)
+          btnText: "견적 보러가기",
+          btnActive: true,
+          img: "https://placehold.co/389x200?text=Example+Trip"
+        };
+
+        // 더미 카드를 맨 앞에 붙이고 + 실제 데이터를 뒤에 붙임
+        setCards([dummyCard, ...formattedData]);
+
+      } catch (error) {
+        console.error("데이터 로딩 실패:", error);
+
+        // 에러가 나도 더미 카드는 보여주기 위해 추가
+        setCards([{
+          id: "dummy-error",
+          title: "에러 발생 시 예시",
+          date: "날짜 미정",
+          people: 0,
+          pickup: "장소 미정",
+          statusBadge: "매칭 대기중",
+          status: "waiting",
+          btnText: "견적 대기중",
+          btnActive: false,
+          img: "https://placehold.co/389x200?text=Error+Fallback"
+        }]);
+
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchMyData();
+  }, []);
+
+  // 2. 삭제 핸들러 (UserMyPage와 동일)
+  const handleDelete = async (e, id) => {
+    e.stopPropagation();
+    if (!window.confirm("정말 이 견적 요청을 삭제하시겠습니까?")) return;
+    try {
+      await cancelTourRequest(id);
+      setCards((prevCards) => prevCards.filter((card) => card.id !== id));
+      alert("삭제되었습니다.");
+    } catch (error) {
+      alert("삭제 중 오류가 발생했습니다.");
     }
-  ];
+  };
 
   return (
     <div className="est-grid">
-      {estimates.map((item) => (
-        <div key={item.id} className="est-card">
-          <div className="est-img-box">
-            <img src={item.img} alt={item.title} />
-            <span className="badge-location">거북섬</span>
-          </div>
-          
-          <div className="est-body">
-            <div className="est-title-row">
-              <h3>{item.title}</h3>
-              <button className="btn-delete" title="삭제">🗑️</button>
+      {loading ? (
+        <div style={{ width: "100%", textAlign: "center", padding: "40px" }}>로딩 중...</div>
+      ) : cards.length === 0 ? (
+        <div style={{ width: "100%", textAlign: "center", padding: "40px", color: "#888" }}>
+          신청한 견적이 없습니다.
+        </div>
+      ) : (
+        cards.map((item) => (
+          <div key={item.id} className="est-card">
+            <div className="est-img-box">
+              <img src={item.img} alt={item.title} />
+              <span className="badge-location">거북섬</span>
             </div>
             
-            <div className="est-info">
-              <p><span className="icon">📅</span> {item.date}</p>
-              <p><span className="icon">👥</span> {item.people}명</p>
-              <p><span className="icon">📍</span> 픽업: {item.pickup}</p>
-            </div>
+            <div className="est-body">
+              <div className="est-title-row">
+                <h3>{item.title}</h3>
+                {/* 삭제 버튼 */}
+                <button 
+                  className="btn-delete" 
+                  onClick={(e) => handleDelete(e, item.id)}
+                  title="삭제"
+                >
+                  🗑️
+                </button>
+              </div>
+              
+              <div className="est-info">
+                <p><span className="icon">📅</span> {item.date}</p>
+                <p><span className="icon">👥</span> {item.people}명</p>
+                <p><span className="icon">📍</span> {item.pickup}</p>
+              </div>
 
-            {/* 상태 뱃지 (파란색 or 회색) */}
-            <div className={`est-status-badge ${item.status}`}>
-              {item.badgeText}
-            </div>
+              <div className={`est-status-badge ${item.status}`}>
+                {item.statusBadge}
+              </div>
 
-            {/* 버튼 (활성화 or 비활성화) */}
-            <button className={`est-action-btn ${item.status}`}
-            onClick={() => {navigate("/quote-detail", { state: { tripInfo: item } });
-              }}
-            >
-              {item.btnText} {item.status === 'arrived' && '>'}
-            </button>
+              <button 
+                className={`est-action-btn ${item.status}`}
+                onClick={() => {
+                  if (item.btnActive) {
+                    navigate("/quote-detail", { state: { tripInfo: item } });
+                  }
+                }}
+              >
+                {item.btnText} {item.status === 'arrived' && '>'}
+              </button>
+            </div>
           </div>
-        </div>
-      ))}
+        ))
+      )}
     </div>
   );
 }

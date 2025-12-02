@@ -1,8 +1,15 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { getMyRequests, getMyProfile } from "../../api/tourApi";
+import { getMyRequests, getMyProfile, cancelTourRequest } from "../../api/tourApi";
 import Header from "../../components/Header";
 import "../../styles/UserMyPage.css";
+
+const LOCATION_ID_MAP = {
+  1: "강남역",
+  2: "서울역",
+  3: "정왕역",
+  4: "시흥시청"
+};
 
 export default function UserMyPage() {
   const [userInfo, setUserInfo] = useState(null); // 내 정보 상태
@@ -14,7 +21,7 @@ export default function UserMyPage() {
         const data = await getMyProfile();
         setUserInfo(data); // 가져온 정보 저장
       } catch (error) {
-        console.log("프로필 정보를 못 가져왔어요 (API 주소 확인 필요)");
+        console.log("프로필 정보를 못 가져왔어요");
       }
     };
     fetchProfile();
@@ -58,7 +65,7 @@ function EstimateListSection() {
       try {
         // 1. API 호출
         const response = await getMyRequests();
-        console.log("📢 서버 응답 원본:", response); // [확인용] F12 콘솔에서 이 내용을 꼭 확인하세요!
+        console.log("📢 서버 응답 원본:", response); // F12 콘솔에서 구조 확인용
 
         // 2. 데이터 꺼내기 (방어 코드)
         // 만약 response 자체가 배열이면 그대로 쓰고, response.data가 배열이면 그걸 씁니다.
@@ -75,28 +82,36 @@ function EstimateListSection() {
         }
 
         // 3. 데이터 가공
-        const formattedData = listData.map((item) => {
+        const formattedData = listData
+        .filter((item) => item.status !== "CANCELED")
+        .map((item) => {
           let dateDisplay = item.startDate;
           if (item.startDate && item.endDate && item.startDate !== item.endDate) {
             dateDisplay = `${item.startDate} ~ ${item.endDate}`;
           }
 
+          // locationId가 없으면 location_id(스네이크 케이스)도 찾아봄
+          const locId = item.locationId || item.location_id; 
+          const locName = item.locationName || LOCATION_ID_MAP[locId] || "(탑승지)";
+
+          const timeStr = item.pickupTime ? item.pickupTime.substring(11, 16) : "00:00 (미정)";
           const isWaiting = item.status === "WAITING";
 
           return {
             id: item.id,
-            // locationName이 없으면 ID라도 보여주기
-            title: item.locationName || `여행지 (ID: ${item.locationId})` || "장소 미정",
+            title: locName, 
             date: dateDisplay || "날짜 미정",
             people: item.participantCount || 0,
-            pickup: item.pickupTime ? item.pickupTime.substring(11, 16) : "09:00 (예정)",
+            pickup: `${timeStr}`,
             statusBadge: isWaiting ? "매칭 대기중" : "견적 도착",
             statusColor: isWaiting ? "gray" : "blue",
             btnText: isWaiting ? "견적 대기중" : "견적 보러가기",
             btnActive: !isWaiting,
             img: "https://placehold.co/389x200?text=Turtle+Connect"
           };
-        });
+        })
+        // ID 기준 내림차순 정렬 (최신순)
+        .sort((a, b) => b.id - a.id);
 
         setCards(formattedData);
 
@@ -110,6 +125,20 @@ function EstimateListSection() {
 
     fetchMyData();
   }, []);
+
+  // 삭제 핸들러
+  const handleDelete = async (e, id) => {
+    e.stopPropagation();
+    if (!window.confirm("정말 이 견적 요청을 삭제하시겠습니까?")) return;
+    try {
+      await cancelTourRequest(id);
+      setCards((prevCards) => prevCards.filter((card) => card.id !== id));
+      alert("삭제되었습니다.");
+    } catch (error) {
+      console.error("삭제 실패:", error);
+      alert("삭제 중 오류가 발생했습니다.");
+    }
+  };
 
   return (
     <section className="mp-card">
@@ -135,14 +164,25 @@ function EstimateListSection() {
         </div>
       ) : (
         <div className="card-grid">
-          {cards.map((card) => (
+          {cards.slice(0, 3).map((card) => (
             <div key={card.id} className="trip-card">
               <div className="card-img-area">
                 <img src={card.img} alt={card.title} />
                 <span className="location-tag">거북섬</span>
               </div>
+
               <div className="card-body">
-                <h3>{card.title}</h3>
+                <div className="card-title-row">
+                  <h3>{card.title}</h3>
+                  <button 
+                    className="btn-delete" 
+                    onClick={(e) => handleDelete(e, card.id)}
+                    title="삭제"
+                  >
+                    🗑️
+                  </button>
+                </div>
+
                 <div className="card-meta">
                   <p>📅 {card.date}</p>
                   <p>👤 {card.people}명</p>
