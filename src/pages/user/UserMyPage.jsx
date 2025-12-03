@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { getMyRequests, getMyProfile, cancelTourRequest } from "../../api/tourApi";
+import { getMyRequests, cancelTourRequest } from "../../api/tourApi";
 import Header from "../../components/Header";
 import "../../styles/UserMyPage.css";
 
@@ -12,20 +12,12 @@ const LOCATION_ID_MAP = {
 };
 
 export default function UserMyPage() {
-  const [userInfo, setUserInfo] = useState(null); // 내 정보 상태
 
-  useEffect(() => {
-    // 페이지 들어오면 내 정보 가져오기
-    const fetchProfile = async () => {
-      try {
-        const data = await getMyProfile();
-        setUserInfo(data); // 가져온 정보 저장
-      } catch (error) {
-        console.log("프로필 정보를 못 가져왔어요");
-      }
-    };
-    fetchProfile();
-  }, []);
+  const [userInfo] = useState({ //더미 데이터
+    name: "최성현",            // 원하는 이름으로 변경하세요
+    email: "turtle@naver.com", // 원하는 이메일
+    profileImage: "https://placehold.co/84x84" // 이미지 URL
+  });
 
   return (
     <div className="mypage-wrapper">
