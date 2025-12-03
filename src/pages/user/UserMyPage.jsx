@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { getMyRequests, cancelTourRequest } from "../../api/tourApi";
 import Header from "../../components/Header";
+import waveParkImage from '../../assets/wave_park.jpg';
+import ellipseAvatar from "../../assets/Ellipse.png";
 import "../../styles/UserMyPage.css";
 
 const LOCATION_ID_MAP = {
@@ -16,7 +18,7 @@ export default function UserMyPage() {
   const [userInfo] = useState({ //더미 데이터
     name: "최성현",            // 원하는 이름으로 변경하세요
     email: "turtle@naver.com", // 원하는 이메일
-    profileImage: "https://placehold.co/84x84" // 이미지 URL
+    profileImage: ellipseAvatar // 이미지 URL
   });
 
   return (
@@ -99,7 +101,7 @@ function EstimateListSection() {
             statusColor: isWaiting ? "gray" : "blue",
             btnText: isWaiting ? "견적 대기중" : "견적 보러가기",
             btnActive: !isWaiting,
-            img: "https://placehold.co/389x200?text=Turtle+Connect"
+            img: waveParkImage
           };
         })
         // ID 기준 내림차순 정렬 (최신순)
@@ -214,7 +216,7 @@ function ProfileSection({ user }) {
   const name = user?.name || "로딩 중...";
   const email = user?.email || "-";
   // 프로필 이미지 (없으면 기본 이미지)
-  const profileImg = user?.profileImage || "https://placehold.co/84x84";
+  const profileImg = user?.profileImage || ellipseAvatar;
 
   return (
     <section className="mp-card">
@@ -222,7 +224,7 @@ function ProfileSection({ user }) {
         <h2>프로필 관리</h2>
       </div>
       <div className="profile-body">
-        <img src="https://placehold.co/84x84" alt="유저" className="profile-img" />
+        <img src= {profileImg} alt="유저" className="profile-img" />
         <div className="profile-info">
           <div className="info-group">
             <span className="label">이름</span>
@@ -328,7 +330,7 @@ function ConfirmedTripSection() {
                 )}
 
                 <div className="trip-summary">
-                  <img src="https://placehold.co/120x120" alt="여행지" className="trip-thumb" />
+                  <img src= {waveParkImage} alt="여행지" className="trip-thumb" />
                   <div className="trip-info">
                     <span className="tag-sm">거북섬</span>
                     <h3>{tInfo.title}</h3>

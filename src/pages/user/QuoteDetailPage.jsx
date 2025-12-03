@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import "../../styles/QuoteDetailPage.css";
 import Header from "../../components/Header";
-import logoTurtle from "../../assets/logo-turtle.png";
 
 export default function QuoteDetailPage() {
   const navigate = useNavigate();

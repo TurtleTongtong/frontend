@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Header from "../../components/Header";
 import { getMyRequests, cancelTourRequest } from "../../api/tourApi"; // API 가져오기
 import "../../styles/EstimatePage.css";
-import logoTurtle from "../../assets/logo-turtle.png";
+import waveParkImage from '../../assets/wave_park.jpg';
 
 // 역 이름 매핑 (UserMyPage와 동일하게)
 const LOCATION_ID_MAP = {
@@ -86,7 +86,7 @@ function EstimateGrid() {
               status: isWaiting ? "waiting" : "arrived", // CSS 클래스용
               btnText: isWaiting ? "견적 대기중" : "견적 보러가기",
               btnActive: !isWaiting,
-              img: "https://placehold.co/389x200?text=Turtle+Connect"
+              img: waveParkImage
             };
           })
           .sort((a, b) => b.id - a.id); // 최신순 정렬
@@ -102,7 +102,7 @@ function EstimateGrid() {
           status: "arrived",       // CSS 클래스 (파란색)
           btnText: "견적 보러가기",
           btnActive: true,
-          img: "https://placehold.co/389x200?text=Example+Trip"
+          img: waveParkImage
         };
 
         // 더미 카드를 맨 앞에 붙이고 + 실제 데이터를 뒤에 붙임
@@ -122,7 +122,7 @@ function EstimateGrid() {
           status: "waiting",
           btnText: "견적 대기중",
           btnActive: false,
-          img: "https://placehold.co/389x200?text=Error+Fallback"
+          img: waveParkImage
         }]);
 
       } finally {
