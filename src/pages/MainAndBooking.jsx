@@ -60,8 +60,6 @@ function BookingSection() {
   const [pickup, setPickup] = useState("강남역");
   const [isPickupOpen, setPickupOpen] = useState(false);
   const [people, setPeople] = useState(1);
-
-  // 여러 날짜 선택용: "YYYY-MM-DD" 문자열 배열
   const [selectedDates, setSelectedDates] = useState([]);
 
   const increase = () => setPeople((p) => Math.min(99, p + 1));
@@ -75,40 +73,42 @@ function BookingSection() {
   const handleReset = () => {
     setPickup("강남역");
     setPeople(1);
-    setSelectedDates([]); // 날짜 선택 초기화
+    setSelectedDates([]);
   };
 
   const handleBooking = async () => {
     // 1. 로그인 체크
     const token = localStorage.getItem("access_token");
+    const role = localStorage.getItem("role"); // 로그인 시 저장해둔 역할
+
     if (!token) {
       alert("로그인이 필요한 서비스입니다.");
       navigate("/login");
       return;
     }
 
-    // 2. 유효성 검사
+    // 2. 역할 체크(TRAVELER만 가능)
+    if (role !== "TRAVELER") {
+      alert("여행자(TRAVELER) 회원만 견적을 신청할 수 있습니다.");
+      return;
+    }
+
+    // 3. 유효성 검사
     if (selectedDates.length === 0) {
       alert("날짜를 선택해주세요.");
       return;
     }
 
     try {
-      // 3. 지역 ID 변환
       const locationId = LOCATION_MAP[pickup] || 1;
 
-      // 4. 백엔드 스펙에 맞는 request body 생성
       const requestData = {
         locationId,
-        startDates: selectedDates,   // ["2025-07-01", "2025-07-03", ...]
+        startDates: selectedDates,
         participantCount: people,
       };
 
-      // 5. 한 번의 POST 요청으로 전송
       const response = await createTourRequest(requestData);
-
-      // 필요하면 응답 data 사용
-      // const { data } = response; // data는 배열: [{ id, status, ... }, ...]
 
       alert(`${selectedDates.length}건의 견적 신청이 완료되었습니다!`);
       navigate("/mypage");
