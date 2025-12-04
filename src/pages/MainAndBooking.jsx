@@ -111,7 +111,7 @@ function BookingSection() {
       // const { data } = response; // data는 배열: [{ id, status, ... }, ...]
 
       alert(`${selectedDates.length}건의 견적 신청이 완료되었습니다!`);
-      navigate("/usermypage");
+      navigate("/mypage");
     } catch (error) {
       console.error(error);
       alert("신청 중 오류가 발생했습니다. 다시 시도해주세요.");

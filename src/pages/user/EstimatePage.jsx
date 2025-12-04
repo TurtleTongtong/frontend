@@ -38,7 +38,7 @@ export default function EstimatePage() {
 function BackLink() {
   const navigate = useNavigate();
   return (
-    <div className="back-link" onClick={() => navigate("/usermypage")}>
+    <div className="back-link" onClick={() => navigate("/mypage")}>
       <span className="arrow-icon">‹</span> 마이페이지로 돌아가기
     </div>
   );

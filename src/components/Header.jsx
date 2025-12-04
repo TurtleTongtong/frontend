@@ -12,17 +12,17 @@ export default function Header() {
   const isFestival = location.pathname.startsWith("/festivals");
   // 마이페이지 관련 경로들: /agency-mypage 및 /dispatch-plan일 때도 활성화
   const isMyPage =
-    location.pathname.startsWith("/usermypage") ||
-    location.pathname.startsWith("/agency-mypage") ||
-    location.pathname.startsWith("/dispatch-plan") ||
-    location.pathname.startsWith("/sentplans");
+    location.pathname.startsWith("/mypage") ||
+    location.pathname.startsWith("/estimates") ||
+    location.pathname.startsWith("/quote-detail") ||
+    location.pathname.startsWith("/agency-mypage");
   const { isLoggedIn, logout, role } = useAuth();
 
-  // 역할에 따라 마이페이지 경로 결정: AGENCY -> /agency-mypage, 그 외(TRAVELER 등) -> /usermypage
+  // 역할에 따라 마이페이지 경로 결정: AGENCY -> /agency-mypage, 그 외(TRAVELER 등) -> /mypage
   // 역할을 대소문자 구분 없이 비교
   const roleUpper = role ? String(role).toUpperCase() : null;
   // 역할에 따라 명시적으로 분기 처리 (if/else 사용)
-  let mypagePath = "/usermypage"; // 기본값: 여행자 마이페이지
+  let mypagePath = "/mypage"; // 기본값: 여행자 마이페이지
   if (roleUpper === "AGENCY") {
     mypagePath = "/agency-mypage";
   } else if (roleUpper === "ADMIN") {

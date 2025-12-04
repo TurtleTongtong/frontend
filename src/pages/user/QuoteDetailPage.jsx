@@ -127,7 +127,7 @@ export default function QuoteDetailPage() {
     setPendingId(null);       
     
     alert("견적 선택이 완료되었습니다! 마이페이지로 이동합니다.");
-    navigate("/usermypage");
+    navigate("/mypage");
   };
 
   return (

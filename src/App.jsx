@@ -29,7 +29,7 @@ export default function App() {
 
         {/* user pages: TRAVELER(또는 일반 사용자)만 접근 허용 */}
         <Route
-          path="/usermypage"
+          path="/mypage"
           element={
             <ProtectedRoute allowedRoles={["TRAVELER"]}>
               <UserMyPage />
