@@ -243,9 +243,10 @@ body {
     height: 36px;
   }
 
-  /* 모바일: 마이페이지, 로그아웃 텍스트 크기 축소 및 줄바꿈 방지 */
+  /* 모바일: 마이페이지, 로그인, 회원가입 버튼 텍스트 크기 축소 및 줄바꿈 방지 */
   .tc-header__right .tc-btn--mypage,
-  .tc-header__right .tc-btn.tc-btn--outline {
+  .tc-header__right .tc-btn.tc-btn--outline,
+  .tc-header__right .tc-btn.tc-btn--primary {
     font-size: 13px;
     padding: 6px 8px;
     height: 32px;
