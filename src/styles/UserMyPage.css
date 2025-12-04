@@ -213,23 +213,6 @@
 .info-row span:last-child { color: #21272A; font-weight: 500; }
 .badge-complete { background: #009AB3; color: white; font-size: 12px; padding: 2px 8px; border-radius: 6px; }
 
-/* 헤더 CSS (오버라이드) */
-.tc-header {
-  background: white;
-  border-bottom: 1px solid #DDE1E6;
-  height: 80px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 40px;
-}
-.tc-header__nav button { background: none; border: none; font-size: 16px; margin: 0 12px; cursor: pointer; color: #21272A; }
-.tc-header__right { display: flex; align-items: center; gap: 24px; }
-.user-status { display: flex; align-items: center; gap: 8px; }
-.active-text { color: #009AB3; font-weight: 600; }
-.header-avatar { width: 40px; height: 40px; border-radius: 50%; border: 1px solid #eee; }
-.btn-logout { border: 1px solid #0F62FE; color: #0F62FE; background: white; padding: 8px 16px; border-radius: 8px; cursor: pointer; }
-
 .card-title-row {
   display: flex;
   justify-content: space-between;
