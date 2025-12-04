@@ -78,7 +78,7 @@ function BookingSection() {
     setSelectedDates([]); // 날짜 선택 초기화
   };
 
- const handleBooking = async () => {
+  const handleBooking = async () => {
     // 1. 로그인 체크
     const token = localStorage.getItem("access_token");
     if (!token) {
@@ -94,36 +94,30 @@ function BookingSection() {
     }
 
     try {
-      // 3. 지역 ID 변환 (공통)
+      // 3. 지역 ID 변환
       const locationId = LOCATION_MAP[pickup] || 1;
 
-      // 4. [핵심 변경] 선택한 날짜 개수만큼 요청 만들기
-      // map 함수를 써서 "약속(Promise)"들의 배열을 만듭니다.
-      const requestPromises = selectedDates.map((date) => {
-        
-        // 각각의 요청 데이터 생성 (시작일 = 종료일 = 해당 날짜)
-        const requestData = {
-          locationId: locationId,
-          startDate: date, // "2025-11-07"
-          endDate: date,   // "2025-11-07" (당일치기)
-          participantCount: people
-        };
+      // 4. 백엔드 스펙에 맞는 request body 생성
+      const requestData = {
+        locationId,
+        startDates: selectedDates,   // ["2025-07-01", "2025-07-03", ...]
+        participantCount: people,
+      };
 
-        // API 호출 함수 실행 (아직 결과는 안 옴)
-        return createTourRequest(requestData);
-      });
+      // 5. 한 번의 POST 요청으로 전송
+      const response = await createTourRequest(requestData);
 
-      // 5. 모든 요청이 다 끝날 때까지 기다림 (병렬 처리)
-      await Promise.all(requestPromises);
-      
+      // 필요하면 응답 data 사용
+      // const { data } = response; // data는 배열: [{ id, status, ... }, ...]
+
       alert(`${selectedDates.length}건의 견적 신청이 완료되었습니다!`);
       navigate("/usermypage");
-
     } catch (error) {
       console.error(error);
-      alert("일부 신청 중 오류가 발생했습니다. 다시 시도해주세요.");
+      alert("신청 중 오류가 발생했습니다. 다시 시도해주세요.");
     }
   };
+
 
   return (
     <section className="tc-booking">
