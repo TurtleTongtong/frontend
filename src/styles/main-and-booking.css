@@ -42,6 +42,66 @@
   margin: 8px 0 0;
 }
 
+/* 히어로 오버레이: 배경과 텍스트 대비 향상 */
+.tc-hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  /* background: linear-gradient(180deg, rgba(0,0,0,0.28) 0%, rgba(0,0,0,0.38) 50%, rgba(0,0,0,0.6) 100%); */
+  pointer-events: none;
+}
+
+/* 반응형: 히어로 섹션 크기 및 텍스트 조정 */
+@media (max-width: 900px) {
+  .tc-hero {
+    height: 380px;
+    border-radius: 12px;
+  }
+
+  .tc-hero__subtitle {
+    font-size: 16px;
+    margin-bottom: 8px;
+  }
+
+  .tc-hero__title-small {
+    font-size: 24px;
+  }
+
+  .tc-hero__title {
+    font-size: 32px;
+  }
+
+  .tc-hero__content {
+    padding: 0 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .tc-hero {
+    height: 260px;
+    border-radius: 8px;
+  }
+
+  .tc-hero__subtitle {
+    font-size: 14px;
+  }
+
+  .tc-hero__title-small {
+    font-size: 18px;
+  }
+
+  .tc-hero__title {
+    font-size: 22px;
+    margin-top: 6px;
+  }
+
+  /* 히어로 내 텍스트 위치를 약간 위로 올려 모바일에서 더 잘 보이게 */
+  .tc-hero__content {
+    justify-content: flex-start;
+    padding-top: 40px;
+  }
+}
+
 /* 예약 카드 섹션 */
 .tc-booking {
   margin-top: 40px;
