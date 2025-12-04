@@ -3,6 +3,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import Header from "../../components/Header"; // 기존 헤더 그대로 사용
 import "../../styles/agency-mypage.css";
+import ellipseAvatar from "../../assets/Ellipse.png";
 
 function AgencyMypage() {
   const navigate = useNavigate();
@@ -20,7 +21,7 @@ function AgencyMypage() {
             <div className="profile-left">
               <div className="profile-avatar">
                 <img
-                  src="/images/sample-user.png"
+                  src={ellipseAvatar}
                   alt="프로필"
                 />
               </div>
