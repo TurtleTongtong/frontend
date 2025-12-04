@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { getMyRequests, cancelTourRequest } from "../../api/tourApi";
 import Header from "../../components/Header";
-import waveParkImage from '../../assets/wave_park.jpg';
+import waveParkImage from '../../assets/dummy/wave_park.jpg';
 import ellipseAvatar from "../../assets/Ellipse.png";
 import "../../styles/UserMyPage.css";
 

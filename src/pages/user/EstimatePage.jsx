@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Header from "../../components/Header";
 import { getMyRequests, cancelTourRequest } from "../../api/tourApi"; // API 가져오기
 import "../../styles/EstimatePage.css";
-import waveParkImage from '../../assets/wave_park.jpg';
+import waveParkImage from '../../assets/dummy/wave_park.jpg';
 
 // 역 이름 매핑 (UserMyPage와 동일하게)
 const LOCATION_ID_MAP = {

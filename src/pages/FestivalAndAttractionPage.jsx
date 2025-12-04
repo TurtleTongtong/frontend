@@ -5,6 +5,12 @@ import Header from "../components/Header";
 import FestivalModal from "../components/FestivalModal";
 import AttractionModal from "../components/AttractionModal";
 
+import festivalImg from "../assets/dummy/festival.png";
+import waveparkImg from "../assets/dummy/wave_park.jpg";
+import beachImg from "../assets/dummy/turtlebeach.png"
+import traditionImg from "../assets/dummy/traditional.png"
+import forestImg from "../assets/dummy/forest.png"
+
 const HERO_PASS_BUTTON_LABEL = "패스 구매하기";
 
 /**
@@ -22,10 +28,8 @@ const FESTIVALS = [
     highlight: "인근 바다 전망과 함께 즐기는 여름 라이트쇼!",
     benefits: ["라이브 버스킹", "물빛 라이트쇼", "푸드트럭 페어"],
     discountBadge: "패스권 소지자 20% 할인",
-    imageMain:
-      "https://www.figma.com/api/mcp/asset/6573653e-73e7-49db-9e9e-f0140404caf6",
-    imageOverlay:
-      "https://www.figma.com/api/mcp/asset/6573653e-73e7-49db-9e9e-f0140404caf6",
+    imageMain: festivalImg,
+    imageOverlay: festivalImg,
   },
   {
     id: 2,
@@ -38,10 +42,8 @@ const FESTIVALS = [
     highlight: "인근 바다 전망과 함께 즐기는 여름 라이트쇼!",
     benefits: ["라이브 버스킹", "물빛 라이트쇼", "푸드트럭 페어"],
     discountBadge: null,
-    imageMain:
-      "https://www.figma.com/api/mcp/asset/6573653e-73e7-49db-9e9e-f0140404caf6",
-    imageOverlay:
-      "https://www.figma.com/api/mcp/asset/6573653e-73e7-49db-9e9e-f0140404caf6",
+    imageMain: festivalImg,
+    imageOverlay: festivalImg,
   },
 ];
 
@@ -59,10 +61,8 @@ const ATTRACTIONS = [
     description:
       "세계 최대 규모의 인공 파도 시설을 갖춘 거북섬의 대표 액티비티 명소입니다. 초보부터 숙련자까지 레벨별 파도존과 전문 강습 프로그램도 마련되어 있습니다.",
     highlight: "여름 기간 서핑 강습 50% 할인",
-    imageMain:
-      "https://www.figma.com/api/mcp/asset/417881fe-854c-47fe-848b-c7e3223543f3",
-    imageOverlay:
-      "https://www.figma.com/api/mcp/asset/417881fe-854c-47fe-848b-c7e3223543f3",
+    imageMain: waveparkImg,
+    imageOverlay: waveparkImg,
   },
   {
     id: 2,
@@ -74,10 +74,8 @@ const ATTRACTIONS = [
     description:
       "탁 트인 바다와 노을이 만들어내는 풍경이 아름다워 데이트 장소나 가족 나들이로 많이 찾는 곳입니다.",
     highlight: null,
-    imageMain:
-      "https://www.figma.com/api/mcp/asset/98a11d21-892b-4b94-8e53-efffbc56d39d",
-    imageOverlay:
-      "https://www.figma.com/api/mcp/asset/5ed4ef1e-d855-4291-a63b-6231074b29e7",
+    imageMain: beachImg,
+    imageOverlay: beachImg,
   },
   {
     id: 3,
@@ -89,9 +87,8 @@ const ATTRACTIONS = [
     description:
       "전통 한옥과 돌담길이 보존된 마을입니다. 전통 문화 체험 프로그램도 운영됩니다.",
     highlight: null,
-    imageMain:
-      "https://www.figma.com/api/mcp/asset/545b3f22-40fd-498c-9d6b-cf7a1b5a1808",
-    imageOverlay: null,
+    imageMain: traditionImg,
+    imageOverlay: traditionImg,
   },
   {
     id: 4,
@@ -103,9 +100,8 @@ const ATTRACTIONS = [
     description:
       "울창한 숲과 맑은 계곡이 있는 힐링 명소입니다. 다양한 트레킹 코스가 마련되어 있습니다.",
     highlight: null,
-    imageMain:
-      "https://www.figma.com/api/mcp/asset/d7b3ffbe-9c9c-4d13-bb0c-3f90d24c9a46",
-    imageOverlay: null,
+    imageMain: forestImg,
+    imageOverlay: forestImg,
   },
 ];
 
