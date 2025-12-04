@@ -2,6 +2,7 @@
 import React from "react";
 import Header from "../components/Header";
 import "../styles/sent-dispatch.css";
+import { useNavigate } from "react-router-dom"; // 추가
 
 // 더미 데이터: 전송된 배차 계획 목록
 const SENT_PLANS = [
@@ -55,6 +56,8 @@ const SENT_PLANS = [
 ];
 
 function SentDispatch() {
+  const navigate = useNavigate(); // 추가
+
   return (
     <div className="dispatch-page">
       <Header />
@@ -74,9 +77,7 @@ function SentDispatch() {
                   <div className="sent-date-row">
                     <span className="icon-calendar-outline" />
                     <span className="sent-date-text">{plan.dateText}</span>
-                    <span className="sent-status-pill">
-                      {plan.status}
-                    </span>
+                    <span className="sent-status-pill">{plan.status}</span>
                   </div>
                   <div className="sent-time-row">
                     <span className="icon-clock" />
@@ -86,7 +87,12 @@ function SentDispatch() {
                     </span>
                   </div>
                 </div>
-                <button className="sent-detail-btn">상세 보기</button>
+                <button
+                  className="sent-detail-btn"
+                  onClick={() => navigate(`/agency-mypage/sent-dispatch/${plan.id}`)} // 상세 페이지로 이동
+                >
+                  상세 보기
+                </button>
               </div>
 
               {/* 픽업 구역 라벨 */}
@@ -99,9 +105,7 @@ function SentDispatch() {
                     <div className="sent-pickup-top">
                       <div className="sent-pickup-order">{p.order}</div>
                       <div className="sent-pickup-name">{p.name}</div>
-                      <div className="sent-pickup-count">
-                        {p.count}건
-                      </div>
+                      <div className="sent-pickup-count">{p.count}건</div>
                     </div>
                     <div className="sent-pickup-time">
                       <span className="icon-clock-small" />
