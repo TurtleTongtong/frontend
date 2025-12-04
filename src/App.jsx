@@ -4,6 +4,7 @@ import TurtleConnectMain from "./pages/MainAndBooking";
 import FestivalPage from "./pages/FestivalAndAttractionPage";
 import LoginPage from "./pages/Login"
 import SignupPage from "./pages/Signup";
+import AgencyMypage from "./pages/AgencyMypage";
 
 export default function App() {
   return (
@@ -13,6 +14,7 @@ export default function App() {
         <Route path="/festivals" element={<FestivalPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignupPage />} />
+        <Route path="/agency-mypage" element={<AgencyMypage />} />
       </Routes>
     </BrowserRouter>
   );
