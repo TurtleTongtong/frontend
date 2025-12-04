@@ -87,6 +87,14 @@ function SignupPage() {
         alert("회원가입이 완료되었습니다.");
         navigate("/login");
       }
+      else if (res.status == 409){
+        let message = "이미 사용중인 이메일입니다.";
+        try {
+          const data = await res.json();
+          if (data.message) message = data.message;
+        } catch (_) {}
+        throw new Error(message);
+      }
       else{
         let message = "회원가입에 실패했습니다.";
         try {
