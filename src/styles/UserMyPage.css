@@ -56,7 +56,7 @@
   .btn-cancel-trip { position: static; align-self: flex-end; }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 520px) {
   .mp-card { padding: 20px; }
   .profile-img { width: 64px; height: 64px; }
   .card-img-area { height: 140px; }

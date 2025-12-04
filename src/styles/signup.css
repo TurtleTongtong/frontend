@@ -207,6 +207,13 @@
   }
 }
 
+/* 모바일(<=520px)에서는 좌측 이미지를 숨겨 폼 중심으로 표시 */
+@media (max-width: 520px) {
+  .signup-visual {
+    display: none;
+  }
+}
+
 /* 성별 버튼 기본 스타일 */
 .signup-gender-btn {
   width: 44px;

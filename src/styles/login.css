@@ -176,6 +176,13 @@
   }
 }
 
+/* 더 작은 화면에서는 좌측 비주얼(이미지)을 숨겨 로그인 폼만 보이도록 함 */
+@media (max-width: 520px) {
+  .login-visual {
+    display: none;
+  }
+}
+
 .login-error-msg {
   margin-top: 8px;
   font-size: 13px;
