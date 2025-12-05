@@ -6,6 +6,7 @@ import FestivalModal from "../components/FestivalModal";
 import AttractionModal from "../components/AttractionModal";
 
 import festivalImg from "../assets/dummy/festival.png";
+import festival2Img from "../assets/dummy/festival2.png";
 import waveparkImg from "../assets/dummy/wave_park.jpg";
 import beachImg from "../assets/dummy/turtlebeach.png"
 import traditionImg from "../assets/dummy/traditional.png"
@@ -33,17 +34,17 @@ const FESTIVALS = [
   },
   {
     id: 2,
-    title: "시흥 거북섬 썸머나잇 페스티벌",
-    date: "2024년 8월 23일(금) - 2024년 8월 24일(토)",
-    place: "거북섬 일대 해변공원",
-    tagline: "거북섬의 시원한 바닷바람과 함께 즐기는 한여름 밤의 축제!",
+    title: "제17회 전국해양스포츠제전",
+    date: "2025년 8월 30일(토) - 2025년 9월 2일(화)",
+    place: "거북섬 해변공원 및 인근 경기장",
+    tagline: "다양한 해양 스포츠가 어우러지는 전국 규모의 축제형 경기 대회",
     description:
-      "거북섬의 시원한 바닷바람과 함께 즐기는 한여름 밤의 축제! 라이브 공연, 물빛 라이트쇼, 푸드트럭까지 다양한 즐길 거리가 마련된 대표 여름 야간 페스티벌입니다.",
-    highlight: "인근 바다 전망과 함께 즐기는 여름 라이트쇼!",
-    benefits: ["라이브 버스킹", "물빛 라이트쇼", "푸드트럭 페어"],
-    discountBadge: null,
-    imageMain: festivalImg,
-    imageOverlay: festivalImg,
+      "제17회 전국해양스포츠제전은 카약, 요트, 수상스키 등 다양한 해양 스포츠 경기가 열리는 행사입니다. 지역 연계 체험 부스와 해양 안전 교육, 야외 공연이 함께 마련되어 있어 가족 단위 관람객도 즐길 수 있습니다. 개막식과 폐막식에서는 유명 가수의 공연과 함께 지역 특산물 마켓이 운영되며, 선수들의 화합을 엿볼 수 있는 다채로운 프로그램이 진행됩니다.",
+    highlight: "카약·요트 등 실제 경기 관전과 해양 체험 부스가 동시에",
+    benefits: ["카약/요트 경기 관전", "해양 체험 부스", "개·폐막식 공연"],
+    discountBadge: "패스권 소지자 입장 우대",
+    imageMain: festival2Img,
+    imageOverlay: festival2Img,
   },
 ];
 
