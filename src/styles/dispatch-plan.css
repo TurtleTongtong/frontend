@@ -102,6 +102,7 @@
   margin: 0;
   font-size: 18px;
   font-weight: 600;
+  color: #000;
 }
 
 .section-sub {
@@ -237,7 +238,7 @@
 }
 
 .time-input {
-  width: 110px;
+  width: 130px;
   height: 32px;
   border-radius: 8px;
   border: 1px solid #e5e7eb;
