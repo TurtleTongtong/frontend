@@ -3,33 +3,44 @@ import React, { useState, useMemo } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import Header from "../../components/Header";
 import "../../styles/dispatch-plan.css";
+import api from "../../api/axiosConfig";
+
+const SEND_PLAN_API = "/api/agency/routes";
 
 // QUOTE 데이터(AgencyMypage에서 넘어온 quotes)를
 // 서울권 / 경기권 섹션으로 나누는 함수
 function buildSectionsFromQuotes(quotes = []) {
-  if (!quotes || quotes.length === 0) {
-    return [];
-  }
+  if (!Array.isArray(quotes) || quotes.length === 0) return [];
 
   const seoulStations = [];
   const gyunggiStations = [];
 
   quotes.forEach((q, index) => {
-    const name = q.station;
+    // ✅ 기존(station/line/people) + 신규(locationName/participantCount/totalPeople) 모두 대응
+    const name =
+      q?.station ?? q?.locationName ?? q?.name ?? q?.stationName ?? "";
+    const line =
+      q?.line ?? q?.lineName ?? q?.route ?? ""; // 없으면 빈 값
+    const people =
+      q?.people ?? q?.participantCount ?? q?.totalPeople ?? 0;
+
     const base = {
-      id: q.id ? String(q.id) : `q-${index}`,
-      name: q.station,
-      line: q.line,
-      people: q.people,
+      id: q.id ? String(q.id) : q.locationId ? `loc-${q.locationId}` : `q-${index}`,
+      locationId: q.locationId,          // ✅ 추가
+      name: q.station ?? q.locationName, // (이미 수정하셨다면 그 로직 유지)
+      line: q.line ?? "",
+      people: q.people ?? q.participantCount ?? q.totalPeople ?? 0,
       selected: true,
     };
 
-    // 아주 단순한 규칙: 지명으로 서울/경기를 나눔
+    // name이 없으면 분류 불가 → 일단 서울권으로 넣거나(혹은 continue)
+    const safeName = String(name || "");
+
     if (
-      name.includes("수원") ||
-      name.includes("부천") ||
-      name.includes("안산") ||
-      name.includes("인천")
+      safeName.includes("수원") ||
+      safeName.includes("부천") ||
+      safeName.includes("안산") ||
+      safeName.includes("인천")
     ) {
       gyunggiStations.push(base);
     } else {
@@ -39,20 +50,11 @@ function buildSectionsFromQuotes(quotes = []) {
 
   const sections = [];
   if (seoulStations.length > 0) {
-    sections.push({
-      id: "seoul",
-      title: "서울권",
-      stations: seoulStations,
-    });
+    sections.push({ id: "seoul", title: "서울권", stations: seoulStations });
   }
   if (gyunggiStations.length > 0) {
-    sections.push({
-      id: "gyunggi",
-      title: "경기권",
-      stations: gyunggiStations,
-    });
+    sections.push({ id: "gyunggi", title: "경기권", stations: gyunggiStations });
   }
-
   return sections;
 }
 
@@ -131,19 +133,66 @@ function DispatchPlan() {
     }));
   };
 
-  const handleSendPlan = () => {
-    // 실제에선 API 호출 등 처리 후 결과 저장
-    console.log("배차 계획 전송", {
-      selectedStations,
-      pickupTimes,
-      budgetAmount,
-      budgetMemo,
-    });
+const [sendError, setSendError] = useState("");
+const [sending, setSending] = useState(false);
 
-    // 전송 후 전송된 배차 계획 목록 페이지로 이동
-    navigate("/agency-mypage/sent-dispatch");
+const handleSendPlan = async () => {
+  setSendError("");
+
+  if (!dateKey) {
+    setSendError("날짜 정보가 없습니다. 다시 시도해 주세요.");
+    return;
+  }
+  if (selectedStations.length === 0) {
+    setSendError("전송할 역이 없습니다. 역을 선택해 주세요.");
+    return;
+  }
+
+  // pickupTime 누락 검증 (선택된 역만)
+  const missingTime = selectedStations.find((st) => !pickupTimes[st.id]);
+  if (missingTime) {
+    setSendError(`탑승 시간이 비어있습니다: ${missingTime.name}`);
+    return;
+  }
+
+  // locationId 누락 검증
+  const missingLocId = selectedStations.find((st) => !st.locationId && st.locationId !== 0);
+  if (missingLocId) {
+    setSendError(`locationId가 없습니다: ${missingLocId.name}`);
+    return;
+  }
+
+  const totalPassengerCount = selectedStations.reduce(
+    (sum, st) => sum + Number(st.people || 0),
+    0
+  );
+
+  const totalCost = budgetAmount && !Number.isNaN(Number(budgetAmount))
+    ? Number(budgetAmount)
+    : 0;
+
+  const body = {
+    date: dateKey, // "YYYY-MM-DD"
+    totalPassengerCount,
+    totalCost,
+    stops: selectedStations.map((st) => ({
+      locationId: st.locationId,
+      pickupTime: pickupTimes[st.id], // "HH:mm"
+    })),
+    note: budgetMemo || "",
   };
 
+  try {
+    setSending(true);
+    await api.post(SEND_PLAN_API, body);
+
+    navigate("/agency-mypage/sent-dispatch");
+  } catch (e) {
+    setSendError("배차 계획 전송에 실패했습니다.");
+  } finally {
+    setSending(false);
+  }
+};
 
   const dayStats = useMemo(() => {
     const people = selectedStations.reduce(
@@ -188,11 +237,6 @@ function DispatchPlan() {
               {/* 서울권 / 경기권 카드들 */}
               {sections.map((sec) => (
                 <div key={sec.id} className="area-block">
-                  <div className="area-header">
-                    <div className="area-dot" />
-                    <span className="area-title">{sec.title}</span>
-                  </div>
-
                   <div className="station-grid">
                     {sec.stations.map((st) => {
                       const isSelected = st.selected;
@@ -375,12 +419,15 @@ function DispatchPlan() {
                 )}
               </div>
 
+              {sendError && <div className="error-text">{sendError}</div>}
+
               <button
                 type="button"
                 className="summary-submit-btn"
                 onClick={handleSendPlan}
+                disabled={sending}
               >
-                배차 계획 전송하기
+                {sending ? "전송중..." : "배차 계획 전송하기"}
               </button>
             </section>
           </aside>
