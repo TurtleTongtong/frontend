@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { getMyRequests, cancelTourRequest } from "../../api/tourApi";
 import Header from "../../components/Header";
+import Footer from "../../components/Footer";
 import waveParkImage from '../../assets/dummy/wave_park.jpg';
 import ellipseAvatar from "../../assets/Ellipse.png";
 import "../../styles/UserMyPage.css";
@@ -48,6 +49,7 @@ export default function UserMyPage() {
         {/* 5. 확정된 여행 (상세 정보) */}
         <ConfirmedTripSection />
       </main>
+      <Footer />
     </div>
   );
 }
@@ -318,7 +320,11 @@ function ConfirmedTripSection() {
           {confirmedTrips.map((item) => {
             const tInfo = item.tripInfo || {};
             const qInfo = item.quoteInfo || {};
-            const bank = qInfo.bankInfo || {};
+            const bank = qInfo.bankInfo || { 
+              account: "기업은행 123-456-789012", holder: "홍길동", contact: "010-6421-4816", email: "turtravel@turtle.com", manager: "강만식" 
+            };
+            const totalPrice = qInfo.totalCost ? qInfo.totalCost.toLocaleString() : "0";
+            const perPerson = qInfo.pricePerPerson ? qInfo.pricePerPerson.toLocaleString() : "0";
             
             const status = item.depositStatus || "미완료";
             const isCompleted = status === "완료";
@@ -345,8 +351,8 @@ function ConfirmedTripSection() {
                     </div>
                   </div>
                   <div className="trip-price">
-                    <div className="price-row"><span>총 금액</span><strong>₩{qInfo.totalPrice}</strong></div>
-                    <div className="price-row"><span>1인당 금액</span><strong>₩{qInfo.perPerson}</strong></div>
+                    <div className="price-row"><span>총 금액</span><strong>₩{totalPrice}</strong></div>
+                    <div className="price-row"><span>1인당 금액</span><strong>₩{perPerson}</strong></div>
                   </div>
                 </div>
 
@@ -373,7 +379,7 @@ function ConfirmedTripSection() {
                   <div className="info-panel cyan">
                     <div className="panel-title"><span className="icon-box blue-border">📞</span> 여행사 연락처</div>
                     <div className="info-row"><span>여행사명</span> <span className="align-right">{qInfo.agencyName}</span></div>
-                    <div className="info-row"><span>전화번호</span> <span>{bank.contact}</span></div>
+                    <div className="info-row"><span>전화번호</span> <span>{bank.contact || "-"}</span></div>
                     <div className="info-row"><span>이메일</span> <span>{bank.email || "-"}</span></div>
                     <div className="info-row"><span>담당자</span> <span>{bank.manager || "-"}</span></div>
                   </div>

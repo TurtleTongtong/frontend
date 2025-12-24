@@ -194,7 +194,8 @@
 
 .icon-location-small,
 .icon-list-small,
-.icon-person-small {
+.icon-person-small,
+.icon-price-small {
   width: 14px;
   height: 14px;
   border-radius: 999px;
